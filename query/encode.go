@@ -198,7 +198,12 @@ func reflectValue(values url.Values, val reflect.Value, scope string) error {
 				values.Add(name, s.String())
 			} else {
 				for i := 0; i < sv.Len(); i++ {
-					values.Add(name, valueString(sv.Index(i), opts))
+					fv := sv.Index(i)
+					if fv.Kind() == reflect.Struct {
+						reflectValue(values, fv, fmt.Sprintf("%v[%b]", name, i))
+					} else {
+						values.Add(name, valueString(fv, opts))
+					}
 				}
 			}
 			continue

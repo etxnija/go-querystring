@@ -147,6 +147,30 @@ func TestValues_types(t *testing.T) {
 			},
 		},
 		{
+			struct {
+				NestedArray []Nested `url:"nestedarray"`
+			}{
+				[]Nested{
+					Nested{
+						A: SubNested{
+							Value: "that",
+						},
+					},
+					Nested{
+						A: SubNested{
+							Value: "this",
+						},
+					},
+				},
+			},
+			url.Values{
+				"nestedarray[0][a][value]": {"that"},
+				"nestedarray[0][b]":        {""},
+				"nestedarray[1][a][value]": {"this"},
+				"nestedarray[1][b]":        {""},
+			},
+		},
+		{
 			nil,
 			url.Values{},
 		},
